@@ -1,0 +1,1 @@
+module.exports = ["*.gif", "*.ico", "*.jpeg", "*.jpg", "*.pdf", "*.png", "*.swf", "*.tiff", "*.wav", "*.wma", "*.wmv"];
