@@ -10,7 +10,7 @@ require('colors');
 // output
 module.exports = (arr, isBufType) => {
 	// 输出表格的大小，只要修改spaceNum即可
-	let spaceNum = 10;
+	let spaceNum = 15;
 
 	let fileType = 'FileType';
 	let total = lineTotal;

@@ -28,22 +28,29 @@ module.exports = (item, file) => {
 
 	let type = '';
 	if (!match) {
-		// 没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`
-		type = '/' + file.split('/').pop();
+		// 没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`；如果file名字太长，会截取前面10个字符，并在其前增加`...`，如：.../...0ca50ff3d2
+		type = file.split('/').pop();
+
+		// type太长的话截取
+		if (type.length > 10) {
+			type = '.../...' + type.substr(0, 10);
+		} else {
+			type = '.../' + type;
+		}
 	} else {
-		// 以`.`开头，并且没有后缀名的文件，如`.DS_Store`
+		// 以`.`开头，并且没有后缀名的文件，如`.DS_Store`；如果file名字太长，会截取前面10个字符，如：....DS_StoreD
 		if (item.startsWith('.') && !item.substr(1).match(/\./g)) {
 			type = match[0];
+
+			// type太长的话截取
+			if (type.length > 10) {
+				type = '...' + type.substr(0, 10);
+			}
 		}
-		// 正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
+		// 正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`;后缀名通常不会超过10个字符
 		else {
 			type = '*' + match[0];
 		}
-	}
-
-	// type太长的话截取
-	if (type.length > 10) {
-		type = '/...' + type.substr(-10);
 	}
 
 	let unit = '个';

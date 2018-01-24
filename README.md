@@ -7,41 +7,52 @@ $ file-stats -dir './'
 ```
 
 ```javascript
-此文件夹下总共有 5225 个文件，符合条件的有 92 个
+此次统计的配置为：
+{
+  dir: /Users/xudeming/Documents/xdm/mid,
+  excludeDir: /(\/node_modules\/)/i,
+  excludeFile: /(\.DS_Store\b|\.localized\b)$/i,
+  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+}
 
 
-FileType Numbers Count：
+文件夹: /Users/xudeming/Documents/xdm/mid/tmp/ 中总共有 5412 个文件，符合条件的有 99 个
+
+
+文件个数统计：
 ---------------------------------------------------------------
-          FileType                    Unit (numbers)
+          FileType                    单位 (个)
 ---------------------------------------------------------------
+          *.md                        5
           *.js                        49
           *.html                      16
-          *.png                       2
+          *.png                       3
           *.less                      22
+          *.gif                       1
           *.json                      3
 ---------------------------------------------------------------
-          total                       92
+          total                       99
 ---------------------------------------------------------------
 
 
-FileType Lines Count：
+文件行数统计：
 ---------------------------------------------------------------
-          FileType                    Unit (lines)
+          FileType                    单位 (行)
 ---------------------------------------------------------------
-          *.js                        16228
+          *.md                        578
+          *.js                        16361
           *.html                      598
           *.less                      1068
           *.json                      122
 ---------------------------------------------------------------
-          total                       18016
+          total                       18727
 ---------------------------------------------------------------
 ```
 
 - 统计出来的FileType有三种形式：
-  - **/file**：代表没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`
-  - **/...0b44f6ffae**：代表文件名太长（通常是没有后缀名的文件），进行了截取
-  - **.file**：代表以`.`开头，并且没有后缀名的文件，如`.DS_Store`
-  - ***.js**：代表正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
+  - **.../file** or **.../...file**：代表没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`；如果file名字太长，会截取前面10个字符，并在其前增加`...`，如：.../...0ca50ff3d2
+  - **.file** or **....file**：代表以`.`开头，并且没有后缀名的文件，如`.DS_Store`；如果file名字太长，会截取前面10个字符，如：....DS_StoreD
+  - ***.js**：代表正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`;后缀名通常不会超过10个字符
 
 
 ## Installation
