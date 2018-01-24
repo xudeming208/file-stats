@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file readFile
+ * @author xudeming208@126.com
+ */
+
 require('colors');
 const fs = require('fs');
 const bufType = require('./bufType');
@@ -21,13 +28,25 @@ module.exports = (item, file) => {
 
 	let type = '';
 	if (!match) {
-		// 不知道类型的，显示/最后的字符
+		// 没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`
 		type = '/' + file.split('/').pop();
 	} else {
-		type = item.startsWith('.') ? match[0] : '*' + match[0];
+		// 以`.`开头，并且没有后缀名的文件，如`.DS_Store`
+		if (item.startsWith('.') && !item.substr(1).match(/\./g)) {
+			type = match[0];
+		}
+		// 正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
+		else {
+			type = '*' + match[0];
+		}
 	}
 
-	let unit = '个'
+	// type太长的话截取
+	if (type.length > 10) {
+		type = '/...' + type.substr(-10);
+	}
+
+	let unit = '个';
 	let num = 1;
 
 	// 统计各种类型文件的个数

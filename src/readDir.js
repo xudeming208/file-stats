@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file readDir
+ * @author xudeming208@126.com
+ */
+
 const fs = require('fs');
 const isDir = require('./isDir');
 const readFile = require('./readFile');
@@ -5,7 +12,7 @@ const readFile = require('./readFile');
 // 读取符合规则的文件夹
 const readDir = config => {
 	let dir = config.dir;
-	let files = fs.readdirSync(dir);
+	let files = fs.readdirSync(dir) || [];
 
 	for (let i = 0, len = files.length; i < len; i++) {
 		let item = files[i];

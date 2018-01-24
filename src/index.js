@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file index
+ * @author xudeming208@126.com
+ */
+
 require('colors');
 const path = require('path');
 
@@ -26,6 +33,12 @@ const init = config => {
 	// 配置
 	config = config ? Object.assign(defaultConfig, config) : defaultConfig;
 
+	let copy = {};
+	for(let key in config) {
+		copy[key] = config[key];
+	}
+	// let copy = JSON.parse(JSON.stringify(config));
+
 	// 转化为绝对路径
 	config.dir = path.resolve(config.dir) + '/';
 
@@ -35,11 +48,21 @@ const init = config => {
 	console.log(``);
 	console.log(``);
 	console.log(``);
-	console.log(`此文件夹下总共有`, `${allFiles}`.red, `个文件，符合条件的有`, `${matchFiles}`.red, `个`);
+	console.log(`此次统计的配置为：`.white)
+	console.log(`{
+	dir: ${copy.dir},
+	excludeDir: ${copy.excludeDir},
+	excludeFile: ${copy.excludeFile},
+	fileType: ${copy.fileType},
+}`)
+	console.log(``);
+	console.log(``);
+	console.log(`文件夹:`, `${config.dir}`.white, `中总共有`, `${allFiles}`.red, `个文件，符合条件的有`, `${matchFiles}`.red, `个`);
 
 	// 输出个数和行数
 	output(countArr, true);
 	output(lineArr, false);
+	console.log(``);
 }
 
 

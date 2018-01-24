@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file output
+ * @author xudeming208@126.com
+ */
+
 require('colors');
 
 // output
@@ -7,14 +14,14 @@ module.exports = (arr, isBufType) => {
 
 	let fileType = 'FileType';
 	let total = lineTotal;
-	let countType = 'Unit (lines)';
-	let tips = 'FileType Lines Count：';
+	let countType = '单位 (行)';
+	let tips = '文件行数统计：';
 
 	// 特殊文件不计算行数，计算个数，如图片，视频等等
 	if (isBufType) {
 		total = countTotal;
-		countType = 'Unit (numbers)';
-		tips = 'FileType Numbers Count：';
+		countType = '单位 (个)';
+		tips = '文件个数统计：';
 	}
 
 	let sepNum = spaceNum * 4 + fileType.length + 15;
