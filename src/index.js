@@ -57,7 +57,7 @@ const init = config => {
 }`)
 	console.log(``);
 	console.log(``);
-	console.log(`文件夹:`, `${config.dir}`.white, `中总共有`, `${allFiles}`.red, `个文件，符合条件的有`, `${matchFiles}`.red, `个`);
+	console.log(`此文件夹中除了`, `node_modules`.white, `文件夹中总共有`, `${allFiles}`.red, `个文件，符合条件的有`, `${matchFiles}`.red, `个`);
 
 	// 输出个数和行数
 	output(countArr, true);

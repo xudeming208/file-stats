@@ -66,7 +66,7 @@ process.nextTick(() => {
 
 Commander.parse(process.argv);
 
-// 没有参数的情况，用默认的配置统计
+// 没有参数的情况，显示help
 if (!process.argv.slice(2).length) {
 	Commander.help();
 }

@@ -55,12 +55,17 @@ module.exports = (item, file) => {
 	// 统计各种类型文件的行数；特殊文件不计算行数，如图片，视频等等，只计算个数
 	if (!bufType.includes(type)) {
 		unit = '行';
-		let content = fs.readFileSync(file, 'utf-8');
+		let content = '';
+		try {
+			content = fs.readFileSync(file, 'utf-8');
+		} catch (e) {
+			content = '';
+		}
 		// 获取行数
 		num = content.split('\n').length;
 		inputArr(lineArr, type, num);
 	}
 
 	// output files
-	console.log(`file：`.white, `${file}  `, `${num}`.red, `${unit}`.red);
+	console.log(`Stat file：`.white, `${file}  `, `${num}`.red, `${unit}`.red);
 }

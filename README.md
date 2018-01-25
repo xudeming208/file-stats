@@ -1,5 +1,6 @@
 # file-stats 
   - 统计某个文件夹中文件的个数及行数
+  - 由于`node_modules`文件夹很大且统计其无实际意义，所以程序强制不会统计`node_modules`文件夹，其中的文件数也不会计算到总共的文件个数中
 
 ## Example
 ```javascript
@@ -9,44 +10,46 @@ $ file-stats -dir './'
 ```javascript
 此次统计的配置为：
 {
-  dir: /Users/xudeming/Documents/xdm/mid,
-  excludeDir: /(\/node_modules\/)/i,
-  excludeFile: /(\.DS_Store\b|\.localized\b)$/i,
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+  dir: './',
+  excludeDir: /^$/,
+  excludeFile: /(\.DS_Store\b|\.localized\b)$/,
+  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b|\.vue\b)$/i,
 }
 
 
-文件夹: /Users/xudeming/Documents/xdm/mid/tmp/ 中总共有 5412 个文件，符合条件的有 99 个
+此文件夹中除了 node_modules 文件夹中总共有 1561 个文件，符合条件的有 148 个
 
 
 文件个数统计：
----------------------------------------------------------------
-          FileType                    单位 (个)
----------------------------------------------------------------
-          *.md                        5
-          *.js                        49
-          *.html                      16
-          *.png                       3
-          *.less                      22
-          *.gif                       1
-          *.json                      3
----------------------------------------------------------------
-          total                       99
----------------------------------------------------------------
+-----------------------------------------------------------------------------------
+               FileType                              单位 (个)
+-----------------------------------------------------------------------------------
+               *.md                                  3
+               *.html                                6
+               *.css                                 6
+               *.js                                  49
+               *.json                                4
+               *.vue                                 71
+               *.png                                 4
+               *.gif                                 5
+-----------------------------------------------------------------------------------
+               total                                 148
+-----------------------------------------------------------------------------------
 
 
 文件行数统计：
----------------------------------------------------------------
-          FileType                    单位 (行)
----------------------------------------------------------------
-          *.md                        578
-          *.js                        16361
-          *.html                      598
-          *.less                      1068
-          *.json                      122
----------------------------------------------------------------
-          total                       18727
----------------------------------------------------------------
+-----------------------------------------------------------------------------------
+               FileType                              单位 (行)
+-----------------------------------------------------------------------------------
+               *.md                                  69
+               *.html                                149
+               *.css                                 913
+               *.js                                  4279
+               *.json                                9250
+               *.vue                                 22398
+-----------------------------------------------------------------------------------
+               total                                 37058
+-----------------------------------------------------------------------------------
 ```
 
 - 统计出来的FileType有三种形式：
@@ -102,22 +105,20 @@ $ npm i file-stats -S
  - 配置某一个选项
  
  ```javascript
- file-stats -d './' -e '/^$/i' -x '/^$/i' -f '/(\.html\b|\.css\b)$/i'
+ file-stats -d './' -e '/^$/' -x '/^$/' -f '/(\.html\b|\.css\b)$/i'
  ```
  - 配置文件
  
  ```javascript
  file-stats -c config.js
- ```
- 配置文件(`config.js`)必须是返回一个配置对象，如：
  
- ```javascript
-module.exports = {
-    dir: "./",
-    excludeDir: /(\/node_modules\/)/i,
-    excludeFile: /(\.DS_Store\b|\.localized\b)$/i,
-    fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
-}
+ // 配置文件(`config.js`)必须是返回一个配置对象，如：
+ module.exports = {
+      dir: "./",
+      excludeDir: /^$/,
+      excludeFile: /(\.DS_Store\b|\.localized\b)$/,
+      fileType: /(\.html\b|\.css\b)$/i
+    }
  ```
 
 - 作为nodejs模块：
@@ -126,7 +127,7 @@ module.exports = {
  const fileStats = require('file-stats');
  
  fileStats({
-    dir: "./"
+      dir: "./"
  })
  ```
 
@@ -136,14 +137,15 @@ module.exports = {
 {
   // 统计哪个文件夹；默认为当前文件夹
   dir: "./",
-  // 哪种文件夹中的文件不统计，规则为正则表达式；默认为node_modules
-  // 如果不想排除，设置excludeDir: /^$/i
-  excludeDir: /(\/node_modules\/)/i,
+  // 哪种文件夹中的文件不统计，规则为正则表达式；默认都统计（除了node_modules文件夹）
+  // 由于node_modules文件夹很大且统计其无实际意义，所以程序强制不会统计node_modules文件夹，其中的文件数也不会计算到总共的文件个数中
+  // 如果要排除test文件夹，可以设置为：excludeDir: /\/test\//
+  excludeDir: /^$/,
   // 哪些文件不统计，规则为正则表达式；默认为.DS_Store、.localized
   // 如果不想排除，设置excludeFile: /^$/i
-  excludeFile: /(\.DS_Store\b|\.localized\b)$/i,
-  // 统计哪种类型的文件，规则为正则表达式；默认包括html,css,less,sass,js,ts,json,jpeg,jpg,png,gif
+  excludeFile: /(\.DS_Store\b|\.localized\b)$/,
+  // 统计哪种类型的文件，规则为正则表达式；默认包括html,css,less,sass,js,ts,json,md,jpeg,jpg,png,gif
   // 如果想统计所有类型，设置fileType:/.*/
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
+  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
 }
 ```
