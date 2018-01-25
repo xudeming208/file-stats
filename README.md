@@ -50,9 +50,11 @@ $ file-stats -dir './'
 ```
 
 - 统计出来的FileType有三种形式：
-  - **.../file** or **.../...file**：代表没有后缀名的文件，file-stats显示文件最后`/`后的字符，如`path/path/file`；如果file名字太长，会截取前面10个字符，并在其前增加`...`，如：.../...0ca50ff3d2
-  - **.file** or **....file**：代表以`.`开头，并且没有后缀名的文件，如`.DS_Store`；如果file名字太长，会截取前面10个字符，如：....DS_StoreD
-  - ***.js**：代表正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`;后缀名通常不会超过10个字符
+  - **/file**：代表没有后缀名的文件，显示文件最后`/`后的字符，如`path/path/file`
+  - **.file**：代表以`.`开头，并且没有后缀名的文件，如`.DS_Store`
+  - ***.fileType**：正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
+
+- 如果FileType的长度超过15位，会截取前面15位加上`...`，如：`/file...`；`.file...`；`*.fileType...`
 
 
 ## Installation
