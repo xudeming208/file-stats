@@ -30,8 +30,8 @@ const readDir = config => {
 				config.dir = path + '/';
 				readDir(config);
 			} else {
-				// 当排除的文件夹很多文件时，为了不让用户以为卡死，在这里输出排除的文件
-				console.log(`No stat file：`.white, `${path}`);
+				// output files
+				console.log(`file：`.white, `${path}`);
 
 				// 文件夹总共的文件数量
 				allFiles++;
@@ -44,6 +44,9 @@ const readDir = config => {
 			config.dir = path + '/';
 			readDir(config);
 		} else {
+			// output files
+			console.log(`file：`.white, `${path}`);
+				
 			// 文件夹总共的文件数量
 			allFiles++;
 

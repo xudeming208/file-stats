@@ -120,6 +120,12 @@ $ npm i file-stats -S
       fileType: /(\.html\b|\.css\b)$/i
     }
  ```
+ 
+ - 统计某一个文件多少行
+ 
+ ```javascript
+ file-stats -d '/Users/xudeming/Documents/xdm/mid/server/base' -f '/utils\.js/'
+ ```
 
 - 作为nodejs模块：
  

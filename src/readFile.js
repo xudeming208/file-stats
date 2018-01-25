@@ -65,7 +65,4 @@ module.exports = (item, file) => {
 		num = content.split('\n').length;
 		inputArr(lineArr, type, num);
 	}
-
-	// output files
-	console.log(`Stat file：`.white, `${file}  `, `${num}`.red, `${unit}`.red);
 }
