@@ -8,54 +8,50 @@
 require('colors');
 
 // output
-module.exports = (arr, isBufType) => {
+module.exports = arr => {
 	// 输出表格的大小，只要修改spaceNum即可
-	let spaceNum = 15;
+	let spaceNum = 12;
 
 	let fileType = 'FileType';
-	let total = lineTotal;
-	let countType = '单位 (行)';
-	let tips = '文件行数统计：';
 
-	// 特殊文件不计算行数，计算个数，如图片，视频等等
-	if (isBufType) {
-		total = countTotal;
-		countType = '单位 (个)';
-		tips = '文件个数统计：';
-	}
-
-	let sepNum = spaceNum * 4 + fileType.length + 15;
-	let itemSpace = spaceNum + fileType.length -1;
+	let sepNum = spaceNum * 5 + fileType.length + 20;
+	let itemSpace = spaceNum + fileType.length - 1;
 	let spaceRepeat = ' '.repeat(spaceNum);
-	let sepRepeat = '-'.repeat(sepNum);
+	let sepRepeat = '-'.repeat(sepNum + spaceNum);
+
+	let countTotal = 0;
+	let lineTotal = 0;
 
 	console.log(``);
 	console.log(``);
-	console.log(`${tips}`.white);
+	console.log(`文件统计结果`.white);
 	console.log(`${sepRepeat}`);
-	console.log(`${spaceRepeat}${fileType}${spaceRepeat}${spaceRepeat}${countType}`);
+	console.log(`${spaceRepeat}${fileType}${spaceRepeat}${spaceRepeat}单位 (个)${spaceRepeat}${spaceRepeat}单位 (行)`);
 	console.log(`${sepRepeat}`);
 
 	let len = arr.length;
 	// 无文件时
 	if (!len) {
-		console.log(`${' '.repeat(sepNum/2-7)}`,`No File`.red);
+		console.log(`${' '.repeat((sepNum + spaceNum)/2-7)}`, `No File`.red);
 	}
 
 	// 输出Stat
-	for (let i = 0; i < len; i += 2) {
+	for (let i = 0; i < len; i += 3) {
 		let type = arr[i];
-		let line = arr[i + 1];
-		let left = ' '.repeat(itemSpace - ('' + type).length);
+		let count = arr[i + 1];
+		let line = arr[i + 2];
+		let countSpace = ' '.repeat(itemSpace - ('' + type).length);
+		let lineSpace = ' '.repeat(itemSpace - ('' + count).length);
 
-		console.log(`${spaceRepeat}${type}${left}${spaceRepeat}`, `${line}`.red);
+		console.log(`${spaceRepeat}${type}${countSpace}${spaceRepeat}`, `${count}`.red, `${spaceRepeat}${lineSpace}`, `${line}`.red);
 
-		total += line;
+		countTotal += count;
+		if (!isNaN(line)) {
+			lineTotal += line;
+		}
 	}
 
-	let totalLen = ('' + total).length;
-
 	console.log(`${sepRepeat}`);
-	console.log(`${spaceRepeat}total${' '.repeat(itemSpace-'total'.length)}${spaceRepeat}`, `${total}`.red);
+	console.log(`${spaceRepeat}total${' '.repeat(itemSpace-'total'.length)}${spaceRepeat}`, `${countTotal} 个`.red, `${spaceRepeat}${' '.repeat(itemSpace - ('' + countTotal).length - 3)}`, `${lineTotal} 行`.red);
 	console.log(`${sepRepeat}`);
 }

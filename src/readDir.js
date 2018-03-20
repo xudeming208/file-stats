@@ -43,15 +43,15 @@ const readDir = config => {
 			// 递归
 			config.dir = path + '/';
 			readDir(config);
-		} else {
-			// output files
-			console.log(`file：`.white, `${path}`);
-				
+		} else {				
 			// 文件夹总共的文件数量
 			allFiles++;
 
 			// 排除某些文件
 			if (config.excludeFile.test(path)) {
+				// output files
+				console.log(`file：`.white, `${path}`);
+
 				continue;
 			}
 			// 符合条件的
@@ -59,6 +59,9 @@ const readDir = config => {
 				readFile(item, path);
 				// 文件夹符合筛选条件的文件数量
 				matchFiles++;
+			} else {
+				// output files
+				console.log(`file：`.white, `${path}`);
 			}
 		}
 	}

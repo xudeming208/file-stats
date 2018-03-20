@@ -13,43 +13,31 @@ $ file-stats -dir './'
   dir: './',
   excludeDir: /^$/,
   excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b|\.vue\b)$/i,
+  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+  countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
 }
 
 
 此文件夹中除了 node_modules 文件夹中总共有 1561 个文件，符合条件的有 148 个
 
 
-文件个数统计：
------------------------------------------------------------------------------------
-               FileType                              单位 (个)
------------------------------------------------------------------------------------
-               *.md                                  3
-               *.html                                6
-               *.css                                 6
-               *.js                                  49
-               *.json                                4
-               *.vue                                 71
-               *.png                                 4
-               *.gif                                 5
------------------------------------------------------------------------------------
-               total                                 148
------------------------------------------------------------------------------------
-
-
-文件行数统计：
------------------------------------------------------------------------------------
-               FileType                              单位 (行)
------------------------------------------------------------------------------------
-               *.md                                  69
-               *.html                                149
-               *.css                                 913
-               *.js                                  4279
-               *.json                                9250
-               *.vue                                 22398
------------------------------------------------------------------------------------
-               total                                 37058
------------------------------------------------------------------------------------
+文件统计结果
+----------------------------------------------------------------------------------------------------
+            FileType                        单位 (个)                        单位 (行)
+----------------------------------------------------------------------------------------------------
+            *.md                            68                               4473
+            *.js                            376                              90386
+            *.json                          32                               616
+            *.jpeg                          12                               --
+            *.html                          490                              43032
+            *.css                           106                              4862
+            *.png                           297                              --
+            *.jpg                           311                              --
+            *.gif                           98                               --
+            *.less                          3                                284
+----------------------------------------------------------------------------------------------------
+            total                           1793 个                          143653 行
+----------------------------------------------------------------------------------------------------
 ```
 
 - 统计出来的FileType有三种形式：
@@ -78,34 +66,37 @@ $ npm i file-stats -S
  - `$ file-stats -h`
  
  ```javascript
-  Usage: index [options] <arguments>
-
+  Usage: file-stats [options] <arguments>
 
   Options:
 
-    -v, -V, --version                 output version number
-    -u, --default                     Use the default config.
-    -d, --dir <dir>                   Set the statistics folder.
-    -e, --exclude-dir <excludeDir>    Exclude folder by regex. The default is: "/(/node_modules/)/i".
-    -x, --exclude-file <excludeFile>  Exclude file by regex. The default is: "/(.DS_Store\b|.localized\b)$/i".
-    -f, --file-type <fileType>        statistics fileType regex. The default is: "/(.html\b|.css\b|.less\b|.sass\b|.js\b|.ts\b|.json\b|.jpeg\b|.jpg\b|.png\b|.gif\b)$/i".
-    -c, --config <config>             Use yours config.js, The config.js must be return an object.
+    -v, -V, --version                 output the version number
+    -u, --default                     Use the default configuration.
+    -d, --dir <dir>                   Configure the statistics folder by String.
+    -e, --exclude-dir <excludeDir>    configure the excluded folders by Regex.
+    -x, --exclude-file <excludeFile>  configure the excluded files by Regex.
+    -f, --file-type <fileType>        configure the file type by Regex.
+    -o, --counts-only <countsOnly>    Configure the file type that only counts the number of files by Regex.
+    -c, --config <config>             Use other configuration files. The configuration file must return an object.
     -h, --help                        output usage information
 
 
   Home: https://github.com/xudeming208/file-stats
 
-  More: https://github.com/xudeming208/file-stats/blob/master/README.md
+  Doc: https://github.com/xudeming208/file-stats/blob/master/README.md
 
-  Demo1: file-stats -d './' -f '/(.htm)$/i' -x '/(banner.html)/i' -e '/(/view/)/i'
+  Examples1: file-stats -u
 
-  Demo2: file-stats -c './myConfig.js'
+  Examples2: file-stats -d './' -e '/\/view\//i' -x '/(\bbanner\.html\b)$/i' -f '/(\.html\b)$/i'
+ -o '/(\.mp4\b)$/i'
+
+  Examples3: file-stats -c './myConfig.js'
  ```
  
  - 配置某一个选项
  
  ```javascript
- file-stats -d './' -e '/^$/' -x '/^$/' -f '/(\.html\b|\.css\b)$/i'
+ file-stats -d './' -e '/^$/' -x '/^$/' -f '/(\.html\b|\.css\b)$/i' -o '/(\.mp4\b)$/i'
  ```
  - 配置文件
  
@@ -114,17 +105,24 @@ $ npm i file-stats -S
  
  // 配置文件(`config.js`)必须是返回一个配置对象，如：
  module.exports = {
-      dir: "./",
+      dir: './',
       excludeDir: /^$/,
       excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-      fileType: /(\.html\b|\.css\b)$/i
+      fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+      countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
     }
  ```
  
  - 统计某一个文件多少行
  
  ```javascript
- file-stats -d '/Users/xudeming/Documents/xdm/mid/server/base' -f '/utils\.js/'
+ file-stats -d './' -f '/utils\.js/'
+ ```
+
+ - 如果要统计swf的个数，不统计其行数，则设置：
+ 
+ ```javascript
+ file-stats -d './' -f '/(\.swf\b)$/i' -o /(\.swf\b)$/i
  ```
 
 - 作为nodejs模块：
@@ -141,17 +139,29 @@ $ npm i file-stats -S
 
 ```javascript
 {
-  // 统计哪个文件夹；默认为当前文件夹
-  dir: "./",
-  // 哪种文件夹中的文件不统计，规则为正则表达式；默认都统计（除了node_modules文件夹）
-  // 由于node_modules文件夹很大且统计其无实际意义，所以程序强制不会统计node_modules文件夹，其中的文件数也不会计算到总共的文件个数中
-  // 如果要排除test文件夹，可以设置为：excludeDir: /\/test\//
+  // 描述：统计哪个文件夹
+  // 类型：字符串；区分大小写，可以为相对目录和绝对目录
+  // 例子：['./', '../test', '/root']
+  dir: './',
+  // 描述：在dir文件夹中排除哪些文件夹
+  // 类型：正则；区分大小写
+  // 例子：排除test文件夹 => /\/test\//
+  // 备注：强制不统计node_modules文件夹
   excludeDir: /^$/,
-  // 哪些文件不统计，规则为正则表达式；默认为.DS_Store、.localized
-  // 如果不想排除，设置excludeFile: /^$/i
+  // 描述：在dir文件夹中排除哪些文件
+  // 类型：正则；区分大小写
+  // 例子：排除test.js文件 => /\btest.js\b/
+  // 备注：如果不想排除，设置excludeFile: /^$/
   excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-  // 统计哪种类型的文件，规则为正则表达式；默认包括html,css,less,sass,js,ts,json,md,jpeg,jpg,png,gif
-  // 如果想统计所有类型，设置fileType:/.*/
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
+  // 描述：在dir文件夹中统计哪些类型，包括其个数和行数的统计
+  // 类型：正则；不区分大小写
+  // 默认值：html,css,less,sass,js,ts,json,md,jpeg,jpg,png,gif
+  // 备注：如果想统计所有类型，设置fileType:/.*/
+  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+  // 描述：fileType的子集，在fileType规定的文件类型中，哪些类型不统计行数(某些类型的文件统计其行数无意义)，只统计其个数
+  // 类型：正则；不区分大小写
+  // 默认值：jpeg, jpg, png, gif
+  // 备注：如果设置countsOnly:/^$/，则fileType规定的类型都会统计行数，包括jpeg、png等
+  countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
 }
 ```

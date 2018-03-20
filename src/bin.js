@@ -19,9 +19,9 @@ Commander.on('--help', function() {
 	console.log(``);
 	console.log(``);
 	console.log(`  Home: https://github.com/xudeming208/file-stats\n`);
-	console.log(`  More: https://github.com/xudeming208/file-stats/blob/master/README.md\n`);
+	console.log(`  Doc: https://github.com/xudeming208/file-stats/blob/master/README.md\n`);
 	console.log(`  Examples1: file-stats -u\n`);
-	console.log(`  Examples2: file-stats -d './' -e '/\\/view\\//i' -x '/(\\bbanner\\.html\\b)$/i' -f '/(\\.html\\b)$/i'\n`);
+	console.log(`  Examples2: file-stats -d './' -e '/\\/view\\//i' -x '/(\\bbanner\\.html\\b)$/i' -f '/(\\.html\\b)$/i'\n -o '/(\\.mp4\\b)$/i'\n`);
 	console.log(`  Examples3: file-stats -c './myConfig.js'\n`);
 });
 
@@ -34,29 +34,34 @@ Commander
 		console.log(`Home: https://github.com/xudeming208/file-stats\n`)
 	})
 	// use default config
-	.option('-u, --default', 'Use the default config.', () => {
+	.option('-u, --default', 'Use the default configuration.', () => {
 
 	})
 	// dir
-	.option('-d, --dir <dir>', 'Set the statistics folder.', dir => {
+	.option('-d, --dir <dir>', 'Configure the statistics folder by String.', dir => {
 		defaultConfig.dir = dir;
 	})
 	// excludeDir
-	.option('-e, --exclude-dir <excludeDir>', 'Exclude folder by regex. The default is: "/(\/node_modules\/)/i".', excludeDir => {
+	.option('-e, --exclude-dir <excludeDir>', 'configure the excluded folders by Regex.', excludeDir => {
 		defaultConfig.excludeDir = eval(excludeDir);
 	})
 	// excludeFile
-	.option('-x, --exclude-file <excludeFile>', 'Exclude file by regex. The default is: "/(\.DS_Store\\b|\.localized\\b)$/i".', excludeFile => {
+	.option('-x, --exclude-file <excludeFile>', 'configure the excluded files by Regex.', excludeFile => {
 		defaultConfig.excludeFile = eval(excludeFile);
 	})
 	// fileType
-	.option('-f, --file-type <fileType>', 'statistics fileType regex. The default is: "/(\.html\\b|\.css\\b|\.less\\b|\.sass\\b|\.js\\b|\.ts\\b|\.json\\b|\.jpeg\\b|\.jpg\\b|\.png\\b|\.gif\\b)$/i".', fileType => {
+	.option('-f, --file-type <fileType>', 'configure the file type by Regex.', fileType => {
 		defaultConfig.fileType = eval(fileType);
 	})
+	// countsOnly
+	.option('-o, --counts-only <countsOnly>', 'Configure the file type that only counts the number of files by Regex.', countsOnly => {
+		defaultConfig.countsOnly = eval(countsOnly);
+	})
 	// config
-	.option('-c, --config <config>', 'Use yours config.js, The config.js must be return an object.', config => {
+	.option('-c, --config <config>', 'Use other configuration files. The configuration file must return an object.', config => {
 		let yoursConfig = require(config);
-		defaultConfig = yoursConfig ? Object.assign(defaultConfig, yoursConfig) : defaultConfig;
+		// defaultConfig = yoursConfig ? Object.assign(defaultConfig, yoursConfig) : defaultConfig;
+		defaultConfig = Object.assign(defaultConfig, yoursConfig);
 	});
 
 // init

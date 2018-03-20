@@ -7,17 +7,24 @@
 
 require('colors');
 const fs = require('fs');
-const bufType = require('./bufType');
 
 // 写入数组
-const inputArr = (arr, type, num) => {
+const inputArr = (arr, type, count, line) => {
 	if (!arr.includes(type)) {
 		arr.push(type);
-		arr.push(num);
+		arr.push(count);
+		arr.push(line);
 	} else {
 		// 如果之前已经统计了此类型，则直接将其line相加
 		let index = arr.indexOf(type);
-		arr[index + 1] += num;
+		arr[index + 1] += count;
+
+		// 特殊文件不计算行数，如图片，视频等等，只计算个数
+		if (countsOnly.test(type)) {
+			arr[index + 2] = '--';
+		} else {
+			arr[index + 2] += line;
+		}
 	}
 }
 
@@ -37,7 +44,7 @@ module.exports = (item, file) => {
 		}
 		// 正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
 		else {
-			type = '*' + match[0].toLowerCase();
+			type = '*' + match[0];
 		}
 	}
 
@@ -46,15 +53,11 @@ module.exports = (item, file) => {
 		type = type.substr(0, 15) + '...';
 	}
 
-	let unit = '个';
-	let num = 1;
-
-	// 统计各种类型文件的个数
-	inputArr(countArr, type, num);
+	let count = 1;
+	let line = 0;
 
 	// 统计各种类型文件的行数；特殊文件不计算行数，如图片，视频等等，只计算个数
-	if (!bufType.includes(type)) {
-		unit = '行';
+	if (!countsOnly.test(type)) {
 		let content = '';
 		try {
 			content = fs.readFileSync(file, 'utf-8');
@@ -62,7 +65,14 @@ module.exports = (item, file) => {
 			content = '';
 		}
 		// 获取行数
-		num = content.split('\n').length;
-		inputArr(lineArr, type, num);
+		line = content.split('\n').length;
+
+		// output files
+		console.log(`file：`.white, `${file}`,` ${line} 行`.red);
+	} else {
+		// output files
+		console.log(`file：`.white, `${file}`,` 1 个`.red);
 	}
+
+	inputArr(statsArr, type, count, line);
 }
