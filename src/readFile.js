@@ -37,7 +37,7 @@ module.exports = (item, file) => {
 		}
 		// 正常有后缀名的文件，如：`path/path/test.js`；包含以.开头的正常的后缀文件，如：`path/path/.file.js`
 		else {
-			type = '*' + match[0];
+			type = '*' + match[0].toLowerCase();
 		}
 	}
 
