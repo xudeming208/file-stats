@@ -9,6 +9,7 @@ const Commander = require('commander');
 const pkg = require('../package.json');
 const init = require('./index');
 let defaultConfig = require('./config');
+let commandArr = [];
 let stat = true;
 
 
@@ -28,7 +29,7 @@ Commander.on('--help', function() {
 // options
 Commander
 	// version
-	.option('-v, -V, --version', 'output the version number', () => {
+	.option('-v, --version', 'output the version number', () => {
 		stat = false;
 		console.log(`\nversion: ${pkg.version}\n`);
 		console.log(`Home: https://github.com/xudeming208/file-stats\n`)
@@ -64,15 +65,17 @@ Commander
 		defaultConfig = Object.assign(defaultConfig, yoursConfig);
 	});
 
+
+commandArr = ['-v', '--version', '-u', '--default', '-d', '--dir', '-e', '--exclude-dir', '-x', '--exclude-file', '-f', '--file-type', '-o', '--counts-only', '-c', '--config'];
+
 // init
 process.nextTick(() => {
 	stat && init(defaultConfig);
 });
 
-
 Commander.parse(process.argv);
 
 // 没有参数或者参数不对的情况，显示help
-if (!process.argv.slice(2).length || !defaultConfig.hasOwnProperty(process.argv.slice(2))) {
+if (!process.argv.slice(2).length || !commandArr.includes(process.argv.slice(2, 3).join())) {
 	Commander.help();
 }
