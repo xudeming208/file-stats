@@ -72,7 +72,7 @@ process.nextTick(() => {
 
 Commander.parse(process.argv);
 
-// 没有参数的情况，显示help
-if (!process.argv.slice(2).length) {
+// 没有参数或者参数不对的情况，显示help
+if (!process.argv.slice(2).length || !defaultConfig.hasOwnProperty(process.argv.slice(2))) {
 	Commander.help();
 }

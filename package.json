@@ -1,6 +1,6 @@
 {
   "name": "file-stats",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "author": "xudeming",
   "email": "xudeming208@126.com",
   "description": "统计某个文件夹中文件的个数及行数",
