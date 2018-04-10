@@ -1,6 +1,6 @@
 {
   "name": "file-stats",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "author": "xudeming",
   "email": "xudeming208@126.com",
   "description": "统计某个文件夹中文件的个数及行数",
@@ -14,16 +14,17 @@
     "file numbers"
   ],
   "scripts": {
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "watch": "npm run build -- -w"
   },
   "engines": {
-    "node": ">=0.6.0"
+    "node": ">=6.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/xudeming208/file-stats"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "colors": "^1.1.2",
