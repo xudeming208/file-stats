@@ -6,7 +6,7 @@
 ```javascript
 $ file-stats -dir './'
 ```
-
+ 
 ```javascript
 此次统计的配置为：
 {
