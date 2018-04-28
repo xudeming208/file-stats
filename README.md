@@ -73,7 +73,7 @@ $ npm i file-stats -S
 ```
 
 ## Usage
-- 作为命令行工具：
+#### 作为命令行工具：
 
  - `$ file-stats -h`
  
@@ -134,10 +134,10 @@ $ npm i file-stats -S
  - 如果要统计swf的个数，不统计其行数，则设置：
  
  ```javascript
- file-stats -d './' -f '/(\.swf\b)$/i' -o /(\.swf\b)$/i
+ file-stats -d './' -f '/(\.swf\b)$/i' -o '/(\.swf\b)$/i'
  ```
 
-- 作为nodejs模块：
+#### 作为nodejs模块：
  
  ```javascript
  const fileStats = require('file-stats');
