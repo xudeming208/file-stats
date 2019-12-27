@@ -24,7 +24,7 @@ module.exports = {
 	// 类型：正则；不区分大小写
 	// 默认值：html,css,less,sass,js,ts,json,md,jpeg,jpg,png,gif
 	// 备注：如果想统计所有类型，设置fileType:/.*/
-	fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.ts\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+	fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.jsx\b|\.ts\b|\.tsx\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
 	// 描述：fileType的子集，在fileType规定的文件类型中，哪些类型不统计行数(某些类型的文件统计其行数无意义)，只统计其个数
 	// 类型：正则；不区分大小写
 	// 默认值：jpeg, jpg, png, gif
