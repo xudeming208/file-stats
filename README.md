@@ -12,45 +12,45 @@
 </p>
 
 # Introduction 
-  - 统计某个文件夹中文件的个数及行数
+  - 统计某些文件夹中文件的个数及行数
   - 由于`node_modules`文件夹很大且统计其无实际意义，所以程序强制不会统计`node_modules`文件夹，其中的文件数也不会计算到总共的文件个数中
 
 ## Example
 ```javascript
-$ file-stats -dir './'
+$ file-stats -d
+$ file-stats --path "['./']"
+$ fst -p "['./', '../mid']"
 ```
  
 ```javascript
 此次统计的配置为：
 {
-  dir: './',
-  excludeDir: /^$/,
-  excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.jsx\b|\.ts\b|\.tsx\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
-  countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
+   path : ["./","../mid"],
+   excludePath : [],
+   excludeFile : [".DS_Store",".localized","npm-debug.log"],
+   fileType : ["html","css","less","sass","js","jsx","ts","tsx","json","md","txt","py","class","java","jsp","php","node","jpeg","jpg","png","gif","mp3","mp4"],
+   countsOnly : ["jpeg","jpg","png","gif","mp3","mp4"],
 }
 
 
-此文件夹中除了 node_modules 文件夹中总共有 2161 个文件，符合条件的有 1793 个
+此文件夹中除了 node_modules 文件夹中总共有 701 个文件，符合条件的有 119 个
 
 
 文件统计结果
------------------------------------------------------------------------------------
-            FileType               单位 (个)               单位 (行)
------------------------------------------------------------------------------------
-            *.md                   68                     4473
-            *.js                   376                    90386
-            *.json                 32                     616
-            *.jpeg                 12                     --
-            *.html                 490                    43032
-            *.css                  106                    4862
-            *.png                  297                    --
-            *.jpg                  311                    --
-            *.gif                  98                     --
-            *.less                 3                      284
------------------------------------------------------------------------------------
-            total                  1793 个                143653 行
------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+            FileType                        单位 (个)                        单位 (行)
+----------------------------------------------------------------------------------------------------
+            *.md                            8                                830
+            *.js                            64                               17437
+            *.json                          4                                168
+            *.html                          16                               591
+            *.png                           3                                --
+            *.less                          22                               1069
+            *.jpg                           1                                --
+            *.gif                           1                                --
+----------------------------------------------------------------------------------------------------
+            total                           119 个                           20095 行
+----------------------------------------------------------------------------------------------------
 ```
 
 - 统计出来的FileType有三种形式：
@@ -76,66 +76,61 @@ $ npm i file-stats -S
 ## Usage
 #### 作为命令行工具：
 
- - `$ file-stats -h`
+ - `$ fst -h`
  
  ```javascript
-  Usage: file-stats [options] <arguments>
+  Usage: index [options] <arguments>
 
   Options:
-
-    -v, -V, --version                 output the version number
-    -u, --default                     Use the default configuration.
-    -d, --dir <dir>                   Configure the statistics folder by String.
-    -e, --exclude-dir <excludeDir>    configure the excluded folders by Regex.
-    -x, --exclude-file <excludeFile>  configure the excluded files by Regex.
-    -f, --file-type <fileType>        configure the file type by Regex.
-    -o, --counts-only <countsOnly>    Configure the file type that only counts the number of files by Regex.
-    -c, --config <config>             Use other configuration files. The configuration file must return an object.
+    -v, --version                     查看版本号
+    -d, --default                     用默认的配置统计
+    -p, --path <path>                 [数组]统计哪些文件夹？
+    -e, --exclude-path <excludePath>  [数组]在path文件夹中排除哪些文件夹？
+    -x, --exclude-file <excludeFile>  [数组]在path文件夹中排除哪些文件？
+    -f, --file-type <fileType>        [数组]在path文件夹中统计哪些文件类型？包括其个数和行数的统计
+    -o, --counts-only <countsOnly>    [数组]fileType的子集。在fileType规定的文件类型中，哪些文件类型不统计行数(比如图片、视频等)，只统计其个数
+    -c, --config <config>             [须返回对象]用自定义的配置文件统计。配置文件必须返回一个对象，参考README.md
     -h, --help                        output usage information
 
 
-  Home: https://github.com/xudeming208/file-stats
+    Home: https://github.com/xudeming208/file-stats
 
-  Doc: https://github.com/xudeming208/file-stats/blob/master/README.md
+    Doc: https://github.com/xudeming208/file-stats/blob/master/README.md
 
-  Examples1: file-stats -u
+    demo1: file-stats -d
 
-  Examples2: file-stats -d './' -e '/\/view\//i' -x '/(\bbanner\.html\b)$/i' -f '/(\.html\b)$/i'
- -o '/(\.mp4\b)$/i'
+    demo2: fst -d
 
-  Examples3: file-stats -c './myConfig.js'
+    demo3: file-stats -p "['./']" -e "['view', 'test']" -x "['index.html', 'index.js']" -f "['html', 'js', 'css', 'jpg']" -o "['jpg']"
+
+    demo4: file-stats -c './myConfig.js'
  ```
  
  - 配置某一个选项
  
  ```javascript
- file-stats -d './' -e '/^$/' -x '/^$/' -f '/(\.html\b|\.css\b)$/i' -o '/(\.mp4\b)$/i'
- ```
- - 配置文件
- 
- ```javascript
- file-stats -c config.js
- 
- // 配置文件(`config.js`)必须是返回一个配置对象，如：
- module.exports = {
-      dir: './',
-      excludeDir: /^$/,
-      excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-      fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.jsx\b|\.ts\b|\.tsx\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
-      countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
-    }
- ```
- 
- - 统计某一个文件多少行
- 
- ```javascript
- file-stats -d './' -f '/utils\.js/'
+ fst -p "['./']" -e "['view', 'test']" -x "['index.html', 'index.js']" -f "['html', 'js', 'css', 'jpg']" -o "['jpg']""
  ```
 
  - 如果要统计swf的个数，不统计其行数，则设置：
  
  ```javascript
- file-stats -d './' -f '/(\.swf\b)$/i' -o '/(\.swf\b)$/i'
+ fst -p "['./']" -f "['swf']" -o "['swf']"
+ ```
+
+ - 配置文件
+ 
+ ```javascript
+ fst -c config.js
+ 
+ // 配置文件(`config.js`)必须是返回一个配置对象，如：
+  module.exports = {
+    path: ['./', '../mid'],
+    excludePath: [],
+    excludeFile: ['.DS_Store', '.localized', 'npm-debug.log'],
+    fileType: ['html', 'css', 'less', 'sass', 'js', 'jsx', 'ts', 'tsx', 'json', 'md', 'txt', 'py', 'class', 'java', 'jsp', 'php', 'node', 'jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4'],
+    countsOnly: ['jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4']
+  }
  ```
 
 #### 作为nodejs模块：
@@ -144,7 +139,7 @@ $ npm i file-stats -S
  const fileStats = require('file-stats');
  
  fileStats({
-      dir: "./"
+      path: ['./']
  })
  ```
 
@@ -152,29 +147,30 @@ $ npm i file-stats -S
 
 ```javascript
 {
-  // 描述：统计哪个文件夹
-  // 类型：字符串；区分大小写，可以为相对目录和绝对目录
-  // 例子：['./', '../test', '/root']
-  dir: './',
-  // 描述：在dir文件夹中排除哪些文件夹
-  // 类型：正则；区分大小写
-  // 例子：排除test文件夹 => /\/test\//
-  // 备注：强制不统计node_modules文件夹
-  excludeDir: /^$/,
-  // 描述：在dir文件夹中排除哪些文件
-  // 类型：正则；区分大小写
-  // 例子：排除test.js文件 => /\btest.js\b/
-  // 备注：如果不想排除，设置excludeFile: /^$/
-  excludeFile: /(\.DS_Store\b|\.localized\b)$/,
-  // 描述：在dir文件夹中统计哪些类型，包括其个数和行数的统计
-  // 类型：正则；不区分大小写
-  // 默认值：html,css,less,sass,js,ts,json,md,jpeg,jpg,png,gif
-  // 备注：如果想统计所有类型，设置fileType:/.*/
-  fileType: /(\.html\b|\.css\b|\.less\b|\.sass\b|\.js\b|\.jsx\b|\.ts\b|\.tsx\b|\.json\b|\.md\b|\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i,
-  // 描述：fileType的子集，在fileType规定的文件类型中，哪些类型不统计行数(某些类型的文件统计其行数无意义)，只统计其个数
-  // 类型：正则；不区分大小写
-  // 默认值：jpeg, jpg, png, gif
-  // 备注：如果设置countsOnly:/^$/，则fileType规定的类型都会统计行数，包括jpeg、png等
-  countsOnly: /(\.jpeg\b|\.jpg\b|\.png\b|\.gif\b)$/i
+  // 描述：统计哪些文件夹
+  // 类型：数组；
+  // 例子：['./', '../test', '/Users/xudeming']
+  // 备注：区分大小写，可以为相对目录和绝对目录
+  path: ['./'],
+  // 描述：在path文件夹中排除哪些文件夹
+  // 类型：数组；
+  // 例子：排除path文件夹下所有的test文件夹、上一级目录的a文件夹和带根目录的b文件夹 => ['test', '../a', '/Users/xudeming/Documents/xdm/file-stats/b']
+  // 备注：区分大小写；为空数组时，代表不排除任何文件夹；数组元素可以为文件夹名，也可以为相对目录文件夹名和绝对目录的文件夹名；强制不统计node_modules文件夹
+  excludePath: [],
+  // 描述：在path文件夹中排除哪些文件
+  // 类型：数组；
+  // 例子：排除path文件夹下所有的test.js文件、上一级目录的a.html和带根目录的b.css => ['test.js', '../a.html', '/Users/xudeming/Documents/xdm/file-stats/b.css']
+  // 备注：区分大小写；为空数组时，代表不排除任何文件；数组元素可以为文件名，也可以为相对目录文件名和绝对目录的文件名
+  excludeFile: ['.DS_Store', '.localized', 'npm-debug.log'],
+  // 描述：在path文件夹中统计哪些文件类型，包括其个数和行数的统计
+  // 类型：数组；
+  // 例子：['html', 'css', 'js']
+  // 备注：不区分大小写；为空数组时，代表不统计任何文件；如果想统计所有类型，设置fileType: ['*']
+  fileType: ['html', 'css', 'less', 'sass', 'js', 'jsx', 'ts', 'tsx', 'json', 'md', 'txt', 'py', 'class', 'java', 'jsp', 'php', 'node', 'jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4'],
+  // 描述：fileType的子集，在fileType规定的文件类型中，哪些文件类型不统计行数(某些类型的文件统计其行数无意义)，只统计其个数
+  // 类型：数组；
+  // 例子：['jpg', 'mp4']
+  // 备注：不区分大小写；为空数组时，代表fileType规定的类型都会统计行数，包括jpeg、png、mp4等
+  countsOnly: ['jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4']
 }
 ```

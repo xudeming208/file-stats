@@ -1,11 +1,14 @@
 {
   "name": "file-stats",
-  "version": "2.2.14",
+  "version": "3.0.0",
   "author": "xudeming",
   "email": "xudeming208@126.com",
   "description": "统计某个文件夹中文件的个数及行数",
   "main": "lib/index.js",
-  "bin": "bin/index.js",
+  "bin": {
+    "file-stats": "bin/index.js",
+    "fst": "bin/index.js"
+  },
   "keywords": [
     "nodejs",
     "file-stats",
