@@ -169,11 +169,11 @@ $ npm i file-stats -S
   // 类型：数组；
   // 例子：['html', 'css', 'js']
   // 备注：不区分大小写；为空数组时，代表不统计任何文件；如果想统计所有类型，设置fileType: ['*']
-  fileType: ['html', 'css', 'less', 'sass', 'js', 'jsx', 'ts', 'tsx', 'json', 'md', 'txt', 'py', 'class', 'java', 'jsp', 'php', 'node', 'jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4'],
+  fileType: ['html', 'css', 'less', 'sass', 'js', 'jsx', 'ts', 'tsx', 'json', 'md', 'txt', 'tpl', 'vue', 'ng', 'py', 'class', 'java', 'jsp', 'php', 'node', 'svg', 'jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4'],
   // 描述：fileType的子集，在fileType规定的文件类型中，哪些文件类型不统计行数(某些类型的文件统计其行数无意义)，只统计其个数
   // 类型：数组；
   // 例子：['jpg', 'mp4']
   // 备注：不区分大小写；为空数组时，代表fileType规定的类型都会统计行数，包括jpeg、png、mp4等
-  countsOnly: ['jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4']
+  countsOnly: ['svg', 'jpeg', 'jpg', 'png', 'gif', 'mp3', 'mp4']
 }
 ```
