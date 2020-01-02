@@ -7,6 +7,7 @@
 
 require('colors');
 const path = require('path');
+const iswin = process.platform == 'win32';
 
 const defaultConfig = require('./config');
 const readDir = require('./readDir');
@@ -74,7 +75,14 @@ const init = config => {
 		}
 	});
 	config.excludePathArr.forEach((item, index) => {
-		config.excludePathArr[index] = item.replace(/\//g, '\\/');
+		if (iswin) {
+			let arr = item.split('\\');
+			let s = arr[0];
+			let e = arr.slice(1);
+			config.excludePathArr[index] = s + '\\\\' + e.join('\\/');
+		} else {
+			config.excludePathArr[index] = item.replace(/\//g, '\\/');
+		}
 	});
 	// 处理excludePath结束
 
@@ -97,7 +105,15 @@ const init = config => {
 		let obj = path.parse(item);
 		// 带路径时
 		if (obj.dir) {
-			config.excludeFile[index] = path.resolve(item);
+			if (iswin) {
+				item = path.resolve(item);
+				let arr = item.split('\\');
+				let s = arr[0];
+				let e = arr.slice(1);
+				config.excludeFile[index] = s + '\\' + e.join('/');
+			} else {
+				config.excludeFile[index] = path.resolve(item);
+			}
 		}
 		// 不带路径时
 		else {
